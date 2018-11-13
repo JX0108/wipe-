@@ -31,12 +31,20 @@ module.exports=function(grunt){
 			}
 		},
 		clean:{
-			dest:['dist/*']
+			dest:['dist/*','sample/js/*']
 		},
 		jshint:{
-			test:['src/js/*wipe.js'],
+			test:['src/js/wipe.js'],
 			options:{
 				jshint:".jshintrc"
+			}
+		},
+		copy:{
+			js:{
+			expand:true,
+			cwd:'dest/js/',
+			src:'.min.js',
+			dest:'sample/js/'
 			}
 		}
 	});
@@ -45,7 +53,9 @@ module.exports=function(grunt){
 	grunt.loadNpmTasks("grunt-contrib-cssmin");
 	grunt.loadNpmTasks("grunt-contrib-clean");
 	grunt.loadNpmTasks("grunt-contrib-jshint");
+	grunt.loadNpmTasks("grunt-contrib-copy");
+	grunt.loadNpmTasks("grunt-text-replace");
 	//告诉grunt当我们输入grunt命令后需要做些
 	//什么，有先后顺序
-	grunt.registerTask("default",["clean","uglify","cssmin"]);
+	grunt.registerTask("default",["clean","uglify","cssmin","copy"]);
 };

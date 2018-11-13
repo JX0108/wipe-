@@ -18,41 +18,22 @@ function drawMask(context){
     context.globalCompositeOperation="destination-out"
 }
 // 在画布上画半径为30的圆
-function drawPoint(context,movex,movey){
+function drawRound(context,x1,y1,x2,y2){
 	context.save();
 	context.beginPath();
-	context.arc(movex,movey,raduis,0,2*Math.PI);
-	context.fillStyle="red";
-	context.fill();
+	if (arguments.length==3) {
+		context.arc(x1,x2,raduis,0,2*Math.PI);
+		context.fillStyle="red";
+		context.fill();
+	}else{
+		context.lineCap="round"
+		context.lineWidth = raduis*2;
+		context.moveTo(x1,y1);
+		context.lineTo(x2,y2);
+		context.stroke();
+	}
 	context.restore();
 }
-function drawLine(context,x1,y1,x2,y2){
-	console.log("传递参数的个数"+arguments.length)
-	context.save();
-	context.beginPath();
-	context.lineCap="round"
-	context.lineWidth = raduis*2;
-	context.moveTo(x1,y1);
-	context.lineTo(x2,y2);
-	context.stroke();
-	context.restore();
-}
-// function drawRound(context,x1,y1,x2,y2){
-// 	context.save();
-// 	context.beginPath();
-// 	if (arguments.length==3) {
-// 		context.arc(x1,x2,raduis,0,2*Math.PI);
-// 		context.fillStyle="red";
-// 		context.fill();
-// 	}else{
-// 		context.lineCap="round"
-// 		context.lineWidth = raduis*2;
-// 		context.moveTo(x1,y1);
-// 		context.lineTo(x2,y2);
-// 		context.stroke();
-// 	}
-// 	context.restore();
-// }
 function clearRect(context){
 	context.clearRect(0,0,_w,_h);
 }
@@ -82,7 +63,7 @@ function down(event){
 		// 获取鼠标在视口的坐标，传递参数到drawpoint的
  		movex= device ? evt.touches[0].clientX:evt.clientX;
 		movey= device ? evt.touches[0].clientY:evt.clientY;
-		 drawPoint(context,movex,movey);
+		  drawRound(context,movex,movey);
 		 isMouseDown = true;
 }
 
@@ -92,11 +73,11 @@ function move(event){
 	if (isMouseDown){
 		var evt = event || window.event;
 		evt.preventDefault(); 
-		// 获取鼠标在视口的坐标，传递参数到drawpoint的
+		// 获取鼠标在视口的坐标，传递参数到 drawRound的
 		var mox= device ? evt.touches[0].clientX:evt.clientX;
 		var moy= device ? evt.touches[0].clientY: evt.clientY;
-		// drawPoint(context,movex,movey);
-		drawLine(context,movex,movey,mox,moy);
+		//  drawRound drawRound(context,movex,movey);
+		 drawRound(context,movex,movey,mox,moy);
 		// 把每次结束点变成下一次划线的开始点
 		movex = mox;
 	    movey = moy;

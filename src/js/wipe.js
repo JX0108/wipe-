@@ -17,10 +17,7 @@ function drawMask(context){
     context.fillRect(0,0,375,667);
     context.globalCompositeOperation="destination-out"
 }
-<<<<<<< HEAD
 // 在画布上画半径为30的圆
-=======
->>>>>>> test01
 function drawRound(context,x1,y1,x2,y2){
 	context.save();
 	context.beginPath();
@@ -66,11 +63,8 @@ function down(event){
 		// 获取鼠标在视口的坐标，传递参数到drawpoint的
  		movex= device ? evt.touches[0].clientX:evt.clientX;
 		movey= device ? evt.touches[0].clientY:evt.clientY;
-<<<<<<< HEAD
 		  drawRound(context,movex,movey);
-=======
 		drawRound(context,movex,movey);
->>>>>>> test01
 		 isMouseDown = true;
 }
 
@@ -83,13 +77,10 @@ function move(event){
 		// 获取鼠标在视口的坐标，传递参数到 drawRound的
 		var mox= device ? evt.touches[0].clientX:evt.clientX;
 		var moy= device ? evt.touches[0].clientY: evt.clientY;
-<<<<<<< HEAD
 		//  drawRound drawRound(context,movex,movey);
 		 drawRound(context,movex,movey,mox,moy);
-=======
 		// drawPoint(context,movex,movey);
 		drawRound(context,movex,movey,mox,moy);
->>>>>>> test01
 		// 把每次结束点变成下一次划线的开始点
 		movex = mox;
 	    movey = moy;

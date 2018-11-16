@@ -1,10 +1,10 @@
 var cas = document.getElementById('cas');
 var context =cas.getContext("2d");
 var _w = cas.width,_h=cas.height;
-var raduis = 10 //涂抹的半径
+var raduis = 10; //涂抹的半径
 var movex,movey;
 var isMouseDown=false;
-var t = 0
+var t = 0;
 var device = (/android|webos|iPhone|ipad|ipod|blackberry|iemobile|opera mini/i.test(navigator.userAgent.toLowerCase()));
 // console.log(device);
 var Press = device ? 'touchstart':'mousedown';
@@ -15,18 +15,18 @@ var Uplift  = device ? 'touchend':'mouseup';
 function drawMask(context){
 	context.fillStyle="#666";
     context.fillRect(0,0,375,667);
-    context.globalCompositeOperation="destination-out"
+    context.globalCompositeOperation="destination-out";
 }
 // 在画布上画半径为30的圆
 function drawRound(context,x1,y1,x2,y2){
 	context.save();
 	context.beginPath();
-	if (arguments.length==3) {
+	if (arguments.length===3) {
 		context.arc(x1,x2,raduis,0,2*Math.PI);
 		context.fillStyle="red";
 		context.fill();
 	}else{
-		context.lineCap="round"
+		context.lineCap="round";
 		context.lineWidth = raduis*2;
 		context.moveTo(x1,y1);
 		context.lineTo(x2,y2);
@@ -41,10 +41,10 @@ function getTransparencyPercent(context){
 	var imgData =context.getImageData(0,0,_w,_h);
 	for (var i = 0; i < imgData.data.length; i+=4) {
 			var a = imgData.data[i+3];
-			if (a==0) {
+			if (a===0) {
 				t++;
-			};
-		};
+			}
+		}
 		console.log("透明点的个数:"+t);
 		var percent=(t/(_w*_h))*100;
 		// console.log(percent);
@@ -53,7 +53,7 @@ function getTransparencyPercent(context){
 }
 window.onload=function(){
 	drawMask(context);
-}
+};
 
 // 在canvas画布上监听自定义事件，mousedown，调用drawPoint图形
 // cas.addEventListener('mousedown',down,false);
@@ -85,17 +85,17 @@ function move(event){
 		movex = mox;
 	    movey = moy;
 	}else{
-		return false
+		return false;
 	}
 }
 // cas.addEventListener('mouseup',fn2,false);
 cas.addEventListener(Uplift,function(event){
-	t=0
+	t=0;
 	isMouseDown = false;
 	if ( getTransparencyPercent(context)>50) {
 		alert("超过了50%的面积");
 		clearRect(context);
-	};
+	}
 },false);
 
 

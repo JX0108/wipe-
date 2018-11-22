@@ -12,15 +12,36 @@
 			padding: 0;
 		}
 		#cas{
-			border: 1px solid #000;
-			background: url(images/wipe1.jpg) center 0 no-repeat;
+			/*border: 1px solid #000;*/
+			/*background: url(images/wipe1.jpg) center 0 no-repeat;*/
+			display: black;
+			margin: 0 auto;
 		}
 	</style>
 </head>
 <body>
-	<canvas id="cas" width="375px" height="677px"></canvas>
-	<span>在主分支上的修改</span>
-	<div>在lx分支的修改</div>
+	<canvas class="cas" id="cas"></canvas>
 </body>
 </html>
 <script type="text/javascript" src="js/wipe.js"></script>
+<script>
+	var  cas02 = new Wipe({
+		id:"cas",		//获取id
+		coverType:"color", //,取值color image
+		color:"red",		// 颜色
+		imgUrl:"images/wipe2.jpg", 			//前面覆盖图
+		backImgUrl:"images/wipe3.jpg", 		//背景图
+		width: "375",      		// canvas宽
+		height:"665",			//canvas高
+		raduis: 15,			//涂抹的半径
+		opcity: 1, //设置透明度
+		callback:wipeCallback, //涂抹完成后的事件
+		transpercent:50 //涂抹多少部分全部清除
+	})
+	function wipeCallback(percents){
+	if (percents>50) {
+	console.log("透明面积超过50%，查看底图");
+	}
+	}
+
+</script>

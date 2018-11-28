@@ -17,6 +17,7 @@ pc端实现涂抹擦除著效果,超过50%的涂抹面积可以查看全部。
 1、在HTML中添加指定idcanvas标签
 例如：<canvas id="cas" width="454" height="667"></canvas>
 编辑文件：
+
 |属性名|取值类型|备注|
 |id|字符串|canvas标签的id|
 |coverType|字符串|取值“color"或”image"|
@@ -48,4 +49,4 @@ var wipeConfig={
 new Wipe(wipeConfig);
  ```4、编写回调函数，用户在涂抹完成的后继操作必须写在此回调函数中。例如：``` 
 function wipecallback(percent){	if (percent>50) {	console.log("透明面积超过50%，查看底图");	}}
- ```
+ ``` ## var3.0.1 ## 更新了延迟计算增加性能 编辑文件：|属性名|取值类型|备注||opcity|数字|画布的透明|

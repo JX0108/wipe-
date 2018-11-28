@@ -7,7 +7,7 @@ function Wipe(obj){
 	// 获取canvas的id名
 	this.conID = obj.id;
 	// 获取用户选择的填充类型
-	this.coverType=obj.coverType;
+	this.coverType=obj.coverType || "color";
 	// 填充的颜色
 	this.color = obj.color ||"#666";
 	// 画布的宽
@@ -17,6 +17,7 @@ function Wipe(obj){
 	// 前面覆盖图
 	this.imgUrl= obj.imgUrl;
 	this.opcity=obj.opcity || 1;
+	this.vclick = true;
 	this.cas = document.getElementById(this.conID);
 	// console.log(this.conID)
 	// 设置宽高和背景图
@@ -27,7 +28,7 @@ function Wipe(obj){
 	this.context =this.cas.getContext("2d");
 	
 	// 涂抹的半径
-	this.raduis = obj.raduis; 
+	this.raduis = obj.raduis || 15; 
 	//保存鼠标视口坐标的变量
 	this.movex = 0;
 	this.movey = 0;
@@ -35,12 +36,15 @@ function Wipe(obj){
 	this.isMouseDown=false;
 	// 判断用户用的是什么端的窗口
 	this.device = (/android|webos|iPhone|ipad|ipod|blackberry|iemobile|opera mini/i.test(navigator.userAgent.toLowerCase()));
+	// 设置文字
+	this.text = obj.text || 0;
+	// this.clearText(obj.text,"20px bold 黑体", "black")
 	// 给canvas蒙上一层画布
-	
 	this.drawMask();
+	
 	// 调用事件
 	this.callback = obj.callback;
-	this.transpercent = obj.transpercent;
+	this.transpercent = obj.transpercent ||50;
 	this.lick();
 }
 // 给canvas蒙上一层画布
@@ -54,14 +58,15 @@ Wipe.prototype.drawMask=function(){
 	 //判断如果是背景图的话
 	}else if(this.coverType==="image"){
 		//将imgUrl指定的图片填充画布
+		this.context.globalAlpha = this.opcity;
 		var that = this;
 		this.imgs = new Image();
 		this.imgs.src = this.imgUrl;
 		//图片加载完成再执行	
 		this.imgs.onload = function(){
-			that.context.drawImage(that.imgs,0,0,imgs.width,imgs.height,0,0,that._w,that._h);
+			that.context.drawImage(that.imgs,0,0,that.imgs.width,that.imgs.height,0,0,that._w,that._h);
 			that.context.globalCompositeOperation="destination-out";
-			// context.drawImage(img,sx,sy,swidth,sheight,x,y,width,height);
+			// context.drawImage(that.img,sx,sy,swidth,sheight,x,y,width,height);
 			// img	规定要使用的图像、画布或视频。
 			// sx	可选。开始剪切的 x 坐标位置。
 			// sy	可选。开始剪切的 y 坐标位置。
@@ -74,6 +79,21 @@ Wipe.prototype.drawMask=function(){
 		};
 	}
 };
+Wipe.prototype.clearText=function(text,fontSize,_color){
+	// 保存当前绘图状态
+	this.context.save();
+	this.context.beginPath();
+	this.context.font=fontSize;
+	this.context.fillStyle = _color;
+	// 恢复原有的绘图状态
+	this.context.textAlign="center";
+	this.context.globalCompositeOperation='destination-over';
+	// mPaint.setTextAlign(Paint.Align.CENTER);
+	// 第二个和第三个参数为文字的坐标点，第四个参数可选，限制字体大小，将文字首座到指定坐标
+	this.context.fillText(text,this.cas.width / 2,this.cas.height/2)
+	// this.context.setTextAlign();
+	this.context.restore();
+}
 // 清除画布
 Wipe.prototype.clearRect=function(){
 	this.context.clearRect(0,0,this._w,this._h);
@@ -122,6 +142,12 @@ Wipe.prototype.drawT = function(x1,y1,x2,y2){
 		return false;
 	}
 };
+Wipe.prototype.getTime=function(){
+	var that = this;
+		setTimeout(function(){
+			that.vclick = true;
+		},1000);
+}
 // 获取透明点占整个画布的百分比
 Wipe.prototype.getTransparencyPercent=function(){
 	var t = 0;
@@ -180,14 +206,21 @@ Wipe.prototype.lick=function(){
 			// 把每次结束点变成下一次划线的开始点
 			that.movex = moxAll;
 		    that.movey = moyAll;
-		    var percents = that.getTransparencyPercent();
-			//调用同名的全局函数
-			that.callback.call(null,percents);
-			//当透明面积超过用户指定的透明面积
-			if( percents > that.transpercent){
-				that.clearRect();
-				that.isMouseDown = false;
-			}		
+		    // 每隔一秒进行一个判断
+			if (that.vclick) {
+				var percents = that.getTransparencyPercent();
+				//调用同名的全局函数
+				console.log(percents);
+				that.callback.call(null,percents);
+				that.vclick = false;
+				that.getTime();
+				//当透明面积超过用户指定的透明面积
+				if( percents > that.transpercent){
+					that.clearRect();
+					that.isMouseDown = false;
+				}		
+			}
+		   
 		}else{
 			return false;
 		}

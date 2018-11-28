@@ -27,21 +27,22 @@
 <script>
 	var  cas02 = new Wipe({
 		id:"cas",		//获取id
-		coverType:"color", //,取值color image
+		coverType:"image", //,取值color image
 		color:"red",		// 颜色
 		imgUrl:"images/wipe2.jpg", 			//前面覆盖图
 		backImgUrl:"images/wipe3.jpg", 		//背景图
 		width: "375",      		// canvas宽
 		height:"665",			//canvas高
 		raduis: 15,			//涂抹的半径
-		opcity: 1, //设置透明度
+		opcity: .5,     //设置透明度
 		callback:wipeCallback, //涂抹完成后的事件
-		transpercent:50 //涂抹多少部分全部清除
+		transpercent:50, //涂抹多少部分全部清除
+		// text:"擦除已完成"
 	})
 	function wipeCallback(percents){
 	if (percents>50) {
 	console.log("透明面积超过50%，查看底图");
 	}
-	}
+}
 
 </script>
